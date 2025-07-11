@@ -19,9 +19,11 @@ internal static partial class DeepLTranslator
     ];
 
     private static Translator? translator;
-    private static readonly DictQueue<string, string> translationCache = new(64);  // Cache for translations
+    private static DictQueue<string, string>? translationCache;
 
     private static Translator Translator => translator ??= new(Program.Config.ApiSecret!);
+
+    private static DictQueue<string, string> TranslationCache => translationCache ??= CreateCacheInstance();
 
     /// <summary>
     /// Gets the collection of supported languages for translation.
@@ -66,7 +68,7 @@ internal static partial class DeepLTranslator
         {
             if (value == targetLanguage) return;  // No change
             targetLanguage = value;
-            translationCache.Clear();  // Clear cache when target language changes
+            TranslationCache.Clear();  // Clear cache when target language changes
         }
     }
 
@@ -82,14 +84,14 @@ internal static partial class DeepLTranslator
 
         originalText = originalText.Trim();
         // Check if the translation is already cached
-        if (translationCache.TryGetValue(originalText, out var cachedTranslation))
+        if (TranslationCache.TryGetValue(originalText, out var cachedTranslation))
             return cachedTranslation;  // Return cached translation to avoid unnecessary API calls
 
         try
         {
             var result = await Translator.TranslateTextAsync(originalText, null, targetLanguage);
             var translatedText = result.Text.Trim();
-            translationCache.Add(originalText, translatedText);  // Cache the translation result
+            TranslationCache.Add(originalText, translatedText);  // Cache the translation result
             return translatedText;
         }
         catch (Exception ex)
@@ -127,11 +129,18 @@ internal static partial class DeepLTranslator
         }
     } // private static string GetTextFromFocusedControl ()
 
+    private static DictQueue<string, string> CreateCacheInstance()
+    {
+        var cacheSize = Program.Config.CacheSize ?? 64;
+        if (cacheSize <= 0) cacheSize = Array.MaxLength;
+        return new(cacheSize);
+    } // private static DictQueue<string, string> CreateCacheInstance ()
+
     /// <summary>
     /// Clears the translation cache.
     /// </summary>
     internal static void ClearCache()
     {
-        translationCache.Clear();
+        TranslationCache.Clear();
     } // internal static void ClearCache ()
 } // internal static class Translator

@@ -25,6 +25,13 @@ public sealed class Config
     public string? ApiSecret { get; set; }
 
     /// <summary>
+    /// Gets or sets the cache-size.
+    /// </summary>
+    [JsonPropertyName("cache-size")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.AllowNamedFloatingPointLiterals)]
+    public int? CacheSize { get; set; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Config"/> class.
     /// </summary>
     public Config() { }
