@@ -28,7 +28,7 @@ See [DeepL's official documentation](https://developers.deepl.com/docs) for more
 ### Cache Size (Optional)
 
 Defines how many translations to cache. The default is 64.
-Less than or equal to 0 means system maximum cache size (2,147,483,591), which may cause performance issues.
+Less than or equal to 0 disables caching.
 
 ## Supported Languages
 

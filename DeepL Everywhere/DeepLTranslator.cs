@@ -19,11 +19,11 @@ internal static partial class DeepLTranslator
     ];
 
     private static Translator? translator;
-    private static DictQueue<string, string>? translationCache;
+    private static IDictQueue<string, string>? translationCache;
 
     private static Translator Translator => translator ??= new(Program.Config.ApiSecret!);
 
-    private static DictQueue<string, string> TranslationCache => translationCache ??= CreateCacheInstance();
+    private static IDictQueue<string, string> TranslationCache => translationCache ??= CreateCacheInstance();
 
     /// <summary>
     /// Gets the collection of supported languages for translation.
@@ -129,12 +129,12 @@ internal static partial class DeepLTranslator
         }
     } // private static string GetTextFromFocusedControl ()
 
-    private static DictQueue<string, string> CreateCacheInstance()
+    private static IDictQueue<string, string> CreateCacheInstance()
     {
         var cacheSize = Program.Config.CacheSize ?? 64;
-        if (cacheSize <= 0) cacheSize = Array.MaxLength;
-        return new(cacheSize);
-    } // private static DictQueue<string, string> CreateCacheInstance ()
+        if (cacheSize <= 0) return new EmptyDictQueue<string, string>();
+        return new DictQueue<string, string>(cacheSize);
+    } // private static IDictQueue<string, string> CreateCacheInstance ()
 
     /// <summary>
     /// Clears the translation cache.

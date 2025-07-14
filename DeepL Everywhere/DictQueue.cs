@@ -11,7 +11,7 @@ namespace DeepLEverywhere;
 /// </summary>
 /// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
 /// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
-internal class DictQueue<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull
+internal class DictQueue<TKey, TValue> : IDictQueue<TKey, TValue> where TKey : notnull
 {
     private readonly Dictionary<TKey, TValue> dictionary;
     private Queue<TKey> keys;
@@ -122,4 +122,4 @@ internal class DictQueue<TKey, TValue> : IDictionary<TKey, TValue> where TKey : 
     /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
         => this.dictionary.GetEnumerator();
-} // internal class DictQueue<TKey, TValue> : IDictionary<TKey, TValue>
+} // internal class DictQueue<TKey, TValue> : IDictQueue<TKey, TValue> where TKey : notnull
