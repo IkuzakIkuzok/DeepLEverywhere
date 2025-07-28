@@ -17,6 +17,7 @@ internal sealed class ResultForm : Form
         this.Text = "DeepL Translation Result";
         this.Size = new(600, 400);
         this.Icon = Properties.Resources.Icon;
+        this.TopMost = true;
         this.KeyPreview = true;
 
         this._resultTextBox = new TextBox
